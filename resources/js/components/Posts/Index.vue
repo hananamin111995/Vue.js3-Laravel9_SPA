@@ -36,25 +36,17 @@
 </template>
 
 
-<script>
-export default {
-    name: "PostsIndex",
-    data() {
-        return {
-            posts: []
-        }
-    },
-    mounted() {
-        this.fetchPosts()
-    },
-    methods: {
-        fetchPosts() {
-            axios.get('/api/posts')
-                .then(response => this.posts = response.data)
-                .catch(error => console.log(error))
+<script >
+    import usePosts from '../../composables/posts';
+    import {onMounted} from "vue";
+    export default {
+        setup()
+        {
+            const {posts, getPosts} = usePosts();
+            onMounted(getPosts);
+            return {posts}
         }
     }
-}
 </script>
 
 <style scoped>
