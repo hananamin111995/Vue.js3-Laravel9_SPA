@@ -1,6 +1,14 @@
 <template>
     <div class="overflow-hidden overflow-x-auto p-6 bg-white border-gray-200">
         <div class="min-w-full align-middle">
+            <div class="mb-4">
+                <select v-model="selectedCategory" class="block mt-1 w-full sm:w-1/4 rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    <option value="" selected>-- Filter by category --</option>
+                    <option v-for="category in categories" :value="category.id">
+                        {{ category.name }}
+                    </option>
+                </select>
+            </div>
             <table class="min-w-full divide-y divide-gray-200 border">
                 <thead>
                 <tr>
@@ -37,7 +45,7 @@
             </table>
             <Pagination
                 :data="posts"
-                @pagination-change-page="getPosts"
+                @pagination-change-page="page=>getPosts(page, selectedCategory)"
             />
         </div>
     </div>
@@ -45,16 +53,25 @@
 
 
 <script >
-    import usePosts from '../../composables/posts';
-    import {onMounted} from "vue";
-    export default {
-        setup()
-        {
-            const {posts, getPosts} = usePosts();
-            onMounted(getPosts);
-            return {posts, getPosts}
-        }
+import usePosts from '../../composables/posts';
+import useCategories from '../../composables/categories';
+import {watch, onMounted, ref } from "vue";
+
+export default {
+    setup() {
+        const selectedCategory = ref('')
+        const {posts, getPosts} = usePosts();
+        const {categories, getCategories} = useCategories();
+        onMounted(()=>{
+            getPosts()
+            getCategories()
+        });
+        watch(selectedCategory, (current, previous) => {
+            getPosts(1, current)
+        })
+        return {posts, getPosts, categories, selectedCategory}
     }
+}
 </script>
 
 <style scoped>
