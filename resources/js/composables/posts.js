@@ -1,7 +1,11 @@
 import { ref } from 'vue'
+import { useRouter } from "vue-router";
 
 export default function usePosts(){
+    const router = useRouter()
     const posts = ref({});
+    const validationErrors = ref({})
+
     const getPosts = async (page = 1,
                             category = '',
                             order_column = 'created_at',
@@ -14,5 +18,20 @@ export default function usePosts(){
             .then(({data}) => posts.value = data)
             .catch(error => console.log(error))
     }
-    return {posts, getPosts}
+
+    const storePost = async (post)=>{
+        axios.post('/api/posts')
+            .then(response => {
+                posts.value = response.data
+                router.push('posts.index')
+            })
+            .catch(error => {
+                if (error.response?.data){
+                    validationErrors.value = error.response.data.errors
+                }
+            })
+    }
+
+
+    return {posts, getPosts, storePost, validationErrors}
 }
