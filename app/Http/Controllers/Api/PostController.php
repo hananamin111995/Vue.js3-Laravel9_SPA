@@ -44,7 +44,6 @@ class PostController extends Controller
             $fileName = $request->file('thumbnail')->getClientOriginalExtension();
             info($fileName);
         }
-     //   dd($request->all());
         $post->update($request->validated());
         return new PostResource($post);
     }
@@ -52,5 +51,11 @@ class PostController extends Controller
     public function show(Post $post)
     {
         return new PostResource($post);
+    }
+
+    public function destroy(Post $post)
+    {
+        $post->delete();
+        return response()->noContent();
     }
 }

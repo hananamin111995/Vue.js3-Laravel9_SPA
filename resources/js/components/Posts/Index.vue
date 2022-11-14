@@ -71,6 +71,9 @@
                             </div>
                         </div>
                     </th>
+                    <th class="px-6 py-3 bg-gray-50 text-left">
+                         Actions
+                    </th>
                 </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200 divide-solid">
@@ -84,6 +87,9 @@
                     <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">{{post.created_at}}</td>
                     <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
                         <router-link :to="{ name: 'posts.edit', params: { id: post.id } }">Edit</router-link>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
+                        <a href="javascript:void(0)" @click="deletePost(post)">Delete</a>
                     </td>
                 </tr>
                 </tbody>
@@ -107,7 +113,7 @@ export default {
         const selectedCategory = ref('')
         const orderColumn = ref('created_at')
         const orderDirection = ref('order_direction')
-        const {posts, getPosts} = usePosts();
+        const {posts, getPosts, deletePost} = usePosts();
         const {categories, getCategories} = useCategories();
         onMounted(()=>{
             getPosts()
@@ -123,7 +129,7 @@ export default {
             getPosts(1, selectedCategory.value, orderColumn.value, orderDirection.value)
 
         }
-        return {posts, getPosts, categories, selectedCategory, orderColumn, orderDirection, updateOrdering}
+        return {posts, getPosts, categories, selectedCategory, orderColumn, orderDirection, updateOrdering, deletePost}
     }
 }
 </script>

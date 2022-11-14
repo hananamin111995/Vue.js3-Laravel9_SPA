@@ -88,5 +88,38 @@ export default function usePosts(){
             .finally(()=> isLoading.value = false )
     }
 
-    return {posts, post, getPost, getPosts, storePost, updatePost, validationErrors, isLoading}
+    const deletePost = async (post)=>{
+
+        swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(`/api/posts/${post.id}`)
+                    .then(response => {
+                        router.push({name:'posts.index'})
+                        swal({
+                            'icon':'success',
+                            'title':'Post Deleted Successfully'
+                        })
+                    })
+                    .catch(error => {
+                        if (error.response?.data){
+                            swal({
+                                'icon':'error',
+                                'title':'something went wrong'
+                            })
+                        }
+                    })
+            }
+        })
+    }
+
+
+    return {posts, post, getPost, getPosts, storePost, updatePost, validationErrors, isLoading, deletePost}
 }
