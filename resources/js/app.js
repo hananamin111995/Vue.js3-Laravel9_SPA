@@ -1,9 +1,10 @@
 import './bootstrap';
 import { createApp } from 'vue/dist/vue.esm-bundler';
-import PostsIndex from './components/Posts/Index.vue'
+import App from './layouts/App.vue'
+import router from './routes'
 import { TailwindPagination } from 'laravel-vue-pagination';
 
-const app = createApp({})
-app.component('posts-index', PostsIndex)
+const app = createApp(App)
+app.use(router)
 app.component('Pagination', TailwindPagination)
 app.mount("#app")
