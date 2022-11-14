@@ -5,6 +5,7 @@ export default function usePosts(){
     const router = useRouter()
     const posts = ref({});
     const validationErrors = ref({})
+    const isLoading = ref(false);
 
     const getPosts = async (page = 1,
                             category = '',
@@ -20,6 +21,11 @@ export default function usePosts(){
     }
 
     const storePost = async (post)=>{
+        if (isLoading.value) return;
+
+        isLoading.value = true;
+        validationErrors.value = {}
+
         axios.post('/api/posts')
             .then(response => {
                 posts.value = response.data
@@ -30,8 +36,9 @@ export default function usePosts(){
                     validationErrors.value = error.response.data.errors
                 }
             })
+            .finally(()=> isLoading.value = false )
     }
 
 
-    return {posts, getPosts, storePost, validationErrors}
+    return {posts, getPosts, storePost, validationErrors, isLoading}
 }
