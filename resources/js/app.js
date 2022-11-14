@@ -6,12 +6,17 @@ import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import {onMounted} from "vue";
 import useAuth from "./composables/Auth";
+import { abilitiesPlugin } from '@casl/vue';
+import ability from './services/ability';
 
 const app = createApp({
     setup(){
         const {getUser} = useAuth()
         onMounted(getUser)
     }
+})
+app.use(abilitiesPlugin, ability, {
+    useGlobalProperties: true
 })
 app.use(router)
 app.use(VueSweetalert2)

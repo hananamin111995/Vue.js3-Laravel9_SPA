@@ -102,8 +102,8 @@
                     </td>
                     <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">{{post.created_at}}</td>
                     <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
-                        <router-link :to="{ name: 'posts.edit', params: { id: post.id } }">Edit</router-link>
-                        <a href="javascript:void(0)" @click="deletePost(post)">Delete</a>
+                        <router-link  v-if="can('posts.update')" :to="{ name: 'posts.edit', params: { id: post.id } }">Edit</router-link>
+                        <a  v-if="can('posts.delete')" href="javascript:void(0)" @click="deletePost(post)">Delete</a>
                     </td>
 
                 </tr>
@@ -122,6 +122,7 @@
 import usePosts from '../../composables/posts';
 import useCategories from '../../composables/categories';
 import {watch, onMounted, ref } from "vue";
+import { useAbility } from '@casl/vue';
 
 export default {
     setup() {
@@ -134,6 +135,7 @@ export default {
         const orderDirection = ref('order_direction')
         const {posts, getPosts, deletePost} = usePosts();
         const {categories, getCategories} = useCategories();
+        const { can } = useAbility()
         onMounted(()=>{
             getPosts()
             getCategories()
@@ -204,7 +206,21 @@ export default {
             )
 
         }
-        return {posts, getPosts, categories, search_category, search_id,search_title,search_content, search_global, orderColumn, orderDirection, updateOrdering, deletePost}
+        return {
+            can,
+            posts,
+            getPosts,
+            categories,
+            search_category,
+            search_id,
+            search_title,
+            search_content,
+            search_global,
+            orderColumn,
+            orderDirection,
+            updateOrdering,
+            deletePost
+        }
     }
 }
 </script>
