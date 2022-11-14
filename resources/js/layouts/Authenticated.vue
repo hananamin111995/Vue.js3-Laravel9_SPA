@@ -13,21 +13,28 @@
                                 </svg>
                             </a>
                         </div>
-
                         <!-- Navigation Links -->
                         <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                            <router-link :to="{name:'posts.index'}" active-class="border-b-2 border-indigo-400" class="inline-flex items-center px-1 pt-1 text-sm font-medium leading-5 text-gray-900 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out">
+                            <router-link :to="{ name: 'posts.index' }" active-class="border-b-2 border-indigo-400" class="inline-flex items-center px-1 pt-1 text-sm font-medium leading-5 text-gray-900 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out">
                                 Posts
                             </router-link>
-                            <router-link  :to="{name:'posts.create'}"  active-class="border-b-2 border-indigo-400" class="inline-flex items-center px-1 pt-1 text-sm font-medium leading-5 text-gray-900 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out">
+                            <router-link :to="{ name: 'posts.create' }" active-class="border-b-2 border-indigo-400" class="inline-flex items-center px-1 pt-1 text-sm font-medium leading-5 text-gray-900 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out">
                                 Create Post
                             </router-link>
                         </div>
                     </div>
+                    <div class="flex items-center">
+                        <div>
+                            <div>Hi, {{ user.name }}</div>
+                            <div class="text-sm text-gray-500">{{ user.email }}</div>
+                        </div>
+                    </div>
+                    <button @click="logout" type="button" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray transition ease-in-out duration-150 ml-4" :class="{ 'opacity-25': processing }" :disabled="processing">
+                        Log out
+                    </button>
                 </div>
             </div>
         </nav>
-
         <!-- Page Heading -->
         <header class="bg-white shadow">
             <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
@@ -36,7 +43,6 @@
                 </h2>
             </div>
         </header>
-
         <!-- Page Content -->
         <main>
             <div class="py-12">
@@ -51,13 +57,20 @@
         </main>
     </div>
 </template>
+
 <script>
-    export default {
-        computed:{
-            currentPageTitle()
-            {
-                return this.$route.meta.title
-            }
+import useAuth from "../composables/Auth";
+import {onMounted} from "vue";
+
+export default {
+    setup() {
+        const {user,processing, logout} = useAuth()
+        return {user,processing, logout}
+    },
+    computed: {
+        currentPageTitle() {
+            return this.$route.meta.title
         }
     }
+}
 </script>
