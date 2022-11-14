@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
 import { useRouter } from "vue-router";
 
 export default function usePosts(){
@@ -7,6 +7,7 @@ export default function usePosts(){
     const post = ref({});
     const validationErrors = ref({})
     const isLoading = ref(false);
+    const swal = inject('$swal')
 
     const getPosts = async (page = 1,
                             category = '',
@@ -44,6 +45,10 @@ export default function usePosts(){
             .then(response => {
                 posts.value = response.data
                 router.push({name:'posts.index'})
+                swal({
+                    'icon':'success',
+                    'title':'Post Saved Successfully'
+                })
             })
             .catch(error => {
                 if (error.response?.data){
@@ -70,6 +75,10 @@ export default function usePosts(){
             .then(response => {
                 posts.value = response.data
                 router.push({name:'posts.index'})
+                swal({
+                    'icon':'success',
+                    'title':'Post Updated Successfully'
+                })
             })
             .catch(error => {
                 if (error.response?.data){
