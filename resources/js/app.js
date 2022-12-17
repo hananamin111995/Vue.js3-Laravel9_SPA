@@ -8,6 +8,7 @@ import {onMounted} from "vue";
 import useAuth from "./composables/Auth";
 import { abilitiesPlugin } from '@casl/vue';
 import ability from './services/ability';
+// import VueQuagga from 'vue-quaggajs';
 
 const app = createApp({
     setup(){
